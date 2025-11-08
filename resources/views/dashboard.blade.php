@@ -45,6 +45,12 @@
                                class="block bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg shadow">
                                 ✅ Presensi Siswa
                             </a>
+
+                            @else (Auth::user()->role === 'user')
+                            <a href="{{ route('presensi.index') }}" 
+                               class="block bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg shadow">
+                                ✅ Presensi Siswa
+                            </a>
                         @endif
 
                     </div>

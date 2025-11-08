@@ -8,6 +8,7 @@ use App\Models\Presensi;
 use App\Models\Siswa;
 
 
+
 // ini bagian dari link/url tampilan siswa
 Route::get('/siswa',[SiswaController::class, 
 'index'])->middleware('auth')->name('siswa.index');
@@ -31,13 +32,13 @@ Route::delete('siswa/{siswa}',[SiswaController::class,
 'destroy'])->name('siswa.destroy');
 
 // ini bagian dari link/url tampilan presensi
-Route::get('/presensi', [PresensiController::class, 
+Route::get('/presensi/index', [PresensiController::class, 
 'index'])->middleware('auth')->name('presensi.index');
 
-Route::get('/presensi/create/{siswa_id}', [PresensiController::class, 
+Route::get('/presensi/create', [PresensiController::class, 
 'create'])->name('presensi.create');
 
-Route::post('/presensi/{siswa_id}', [PresensiController::class, 
+Route::post('presensi', [PresensiController::class, 
 'store'])->name('presensi.store');
 
 Route::delete('presensi/{siswa_id}',[PresensiController::class, 
@@ -53,6 +54,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/siswa', [SiswaController::class, 'index'])->name('siswa.index');
+
 Route::get('/presensi', [PresensiController::class, 'index'])->name('presensi.index');
 
 // // ini bagian dari link/url tampilan dashboard

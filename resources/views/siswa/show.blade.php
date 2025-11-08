@@ -17,6 +17,8 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>Nama</th>
+                            <th>Keterangan</th>
                             <th>Datang</th>
                             <th>Pulang</th>
                         </tr>
@@ -24,6 +26,8 @@
                     <tbody>
                         @foreach($siswa->presensi as $presensi)
                         <tr>
+                            <td>{{ $presensi->nama }}</td>
+                            <td>{{ $presensi->keterangan }}</td>
                             <td>{{ $presensi->datang }}</td>
                             <td>{{ $presensi->pulang }}</td>
                         </tr>

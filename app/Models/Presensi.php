@@ -13,8 +13,8 @@ class Presensi extends Model
 
     protected $fillable = [
     //
-    'siswa_id',
     'name',
+    'keterangan',
     'jam_masuk',
     'jam_pulang',
     ];

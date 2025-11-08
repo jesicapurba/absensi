@@ -33,43 +33,36 @@ class PresensiController extends Controller
      */
     public function create(Request $request)
     {
-        $siswa = Siswa::findOrFail($request->siswa_id);
-
-        $siswa = \App\Models\Siswa::findOrFail($request->siswa_id);
+            // Ambil semua data siswa yang dibutuhkan
+            $all_siswa = Siswa::select('id', 'name')->get(); // Sesuaikan 'name' dengan field nama di tabel Anda
+            
+            // Kirim data ke view
+            return view('presensi.create', compact('all_siswa')); 
+        
 
     }
+    
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'jam_masuk' => 'required|date',
-            'jam_pulang' => 'required|date|after_or_equal:datang',
-        ]);
 
-        
-        $datang = Carbon::parse($request->datang);
-        $pulang = Carbon::parse($request->pulang);
-        
-        $siswa = Presensi::findOrFail($request->siswa_id);
+    $request->validate([
+    'name' => 'required|string|max:100',
+    'keterangan' => 'required|string|in:Hadir,Izin,Sakit,Alfa',
+    'jam_masuk' => 'required|date',
+    'jam_pulang' => 'required|date|after_or_equal:datang',  
 
-        Presensi::create([
-            'siswa_id' =>$siswa->id,
-            'name' => $request->name,
-            'jam_masuk' => $request->jam_masuk,
-            'jam_pulang' => $request->jam_pulang,
-        ]);
+    ]);
 
+    Presensi::create($request->all());
+    
 
-        return redirect()->route('presensi.index')
-                        ->with('success', 'Data presensi berhasil ditambahkan.');
+    return redirect()->route('presensi.index')->with('success','Presensi berhasil ditambahakan');
     }
-
-
-    /**
+        /**
      * Display the specified resource.
      */
     public function update(Request $request, $id)
@@ -85,6 +78,7 @@ class PresensiController extends Controller
             'jam_pulang' => 'required|date|after_or_equal:datang',
         ]);
 
+        
        
 
         // jika karyawan diubah, ambil data karyawan baru
