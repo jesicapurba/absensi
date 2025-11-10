@@ -3,96 +3,103 @@
 namespace App\Http\Controllers;
 
 use App\Models\Presensi;
-use App\Models\Siswa;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\RedirectResponse;
+use Carbon\Carbon;
 
 class PresensiController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Menampilkan rekap data presensi (presensi.index)
      */
-    public function index(Request $request)
+    public function index()
     {
-        $query = Presensi::query();
-
-        // kalau ada pencarian
-        if($request->has('search') && $request->search != ''){
-            $query->where('name', 'like', '%' . $request->search . '%')
-            ->orWhere('jurusan', 'like', '%' . $request->search . '%');
-        }
-        
-        $presensi = $query->paginate(10);
-        return view('presensi.index', compact('presensi'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-            // Ambil semua data siswa yang dibutuhkan
-            $all_siswa = Siswa::select('id', 'name')->get(); // Sesuaikan 'name' dengan field nama di tabel Anda
-            
-            // Kirim data ke view
-            return view('presensi.create', compact('all_siswa')); 
-        
-
+       // PresensiController@index
+    $presensis = Presensi::with('siswa')->latest()->get(); 
+    return view('presensi.index', compact('presensis'));
     }
     
-
     /**
-     * Store a newly created resource in storage.
+     * Menampilkan form untuk Jam Masuk (presensi.create/masuk)
+     * Kita bisa arahkan rute 'create' ke view form masuk.
      */
-    public function store(Request $request)
+    public function create()
     {
-
-    $request->validate([
-    'name' => 'required|string|max:100',
-    'keterangan' => 'required|string|in:Hadir,Izin,Sakit,Alfa',
-    'jam_masuk' => 'required|date',
-    'jam_pulang' => 'required|date|after_or_equal:datang',  
-
-    ]);
-
-    Presensi::create($request->all());
-    
-
-    return redirect()->route('presensi.index')->with('success','Presensi berhasil ditambahakan');
+        // Mengarahkan ke form Masuk (misalnya: resources/views/presensi/create.blade.php)
+        return view('presensi.create');
     }
-        /**
-     * Display the specified resource.
-     */
-    public function update(Request $request, $id)
-    {
-        // ambil data pengajuan dan karyawan terkait
-        $presensi = Presensi::findOrFail($id);
-        $siswa = $presensi->siswa;
 
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'keterangan' => 'required|string|in:Hadir,Izin,Sakit,Alfa',
-            'jam_masuk' => 'required|date',
-            'jam_pulang' => 'required|date|after_or_equal:datang',
+    // --- LOGIKA SIMPAN MASUK (storeMasuk) ---
+    public function storeMasuk(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'keterangan' => 'required|in:Hadir,Izin,Sakit',
         ]);
 
-        
-       
+        $namaSiswa = $validated['name'];
+        $hariIni = Carbon::today(); // Mengambil tanggal hari ini (00:00:00)
 
-        // jika karyawan diubah, ambil data karyawan baru
-        if ($siswa->id != $request->siswa_id) {
-            $siswa = Siswa::findOrFail($request->siswa_id);
+        // 1. Pengecekan Absen Harian (SOLUSI ABSEN 1X SEHARI)
+        $presensiHariIni = Presensi::where('name', $namaSiswa)
+                                    ->whereDate('jam_masuk', $hariIni)
+                                    ->first();
+
+        if ($presensiHariIni) {
+            // Jika record sudah ada untuk hari ini
+            return redirect()->back()
+                             ->with('error', 'Anda (' . $namaSiswa . ') sudah melakukan presensi hari ini. Tidak bisa absen dua kali.')
+                             ->withInput();
         }
 
+        try {
+            // Tentukan waktu masuk
+            $jamMasuk = Carbon::now();
 
+            // 2. Simpan Data
+            Presensi::create([
+                'name' => $namaSiswa,
+                'keterangan' => $validated['keterangan'],
+                'jam_masuk' => $jamMasuk,
+                // jam_pulang akan NULL
+            ]);
+
+            // 3. Redirect Sukses
+            return redirect()->route('presensi.index')
+                             ->with('success', 'Absensi ' . $namaSiswa . ' berhasil dicatat sebagai ' . $validated['keterangan'] . '!');
+
+        } catch (\Exception $e) {
+            \Log::error('Presensi Store Error: ' . $e->getMessage());
+            return redirect()->back()
+                             ->with('error', 'Gagal menyimpan data. Silakan coba lagi.')
+                             ->withInput();
+        }
     }
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function destroy($id)
+    
+    // ... (metode lainnya)
+
+
+    // --- LOGIKA SIMPAN PULANG (storePulang) ---
+    public function storePulang(Request $request)
     {
-        
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $today = now()->toDateString();
+        $presensi = Presensi::where('name', $request->name)
+                            ->whereDate('jam_masuk', $today)
+                            ->whereNull('jam_pulang') // Hanya yang belum pulang
+                            ->first();
+
+        if (!$presensi) {
+            return redirect()->route('presensi.index')->with('error', 'Data masuk hari ini tidak ditemukan atau sudah pulang!');
+        }
+
+        // Update data Jam Pulang
+        $presensi->update([
+            'jam_pulang' => now(), // Waktu real-time server
+        ]);
+
+        return redirect()->route('presensi.index')->with('success', 'Presensi Pulang berhasil dicatat!');
     }
 }

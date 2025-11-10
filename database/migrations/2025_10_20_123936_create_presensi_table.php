@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('presensi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('siswa')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('name', 100);
             $table->enum('keterangan', ['Hadir','Izin','Sakit','Alfa']);
             $table->time('jam_masuk');
-            $table->time('jam_pulang');
+            $table->time('jam_pulang')->nullable();
             $table->timestamps();
         });
     }

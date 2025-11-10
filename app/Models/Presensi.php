@@ -19,8 +19,20 @@ class Presensi extends Model
     'jam_pulang',
     ];
 
+    protected $casts = [
+        'jam_masuk' => 'datetime',
+        'jam_pulang' => 'datetime', // <--- PENTING
+    ];
+
     public function siswa()
     {
         return $this->belongsTo(Siswa::class);
     }
+
+    public function isAdmin(): bool
+    {
+        // Pengecekan apakah nilai kolom 'role' sama dengan 'admin'
+        return $this->role === 'admin';
+    }
 }
+

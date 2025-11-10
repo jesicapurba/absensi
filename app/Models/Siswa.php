@@ -14,7 +14,7 @@ class Siswa extends Model
     protected $table = 'siswa';
 
     protected $fillable = [
-        'users_id',
+        'user_id',
         'nis',
         'name',
         'asal_sekolah',
@@ -28,6 +28,10 @@ class Siswa extends Model
     }
     public function presensi(): HasMany
     {
-        return $this->hasMany(Presensi::class, 'siswa_id');
+        return $this->hasMany(Presensi::class, 'user_id');
+    }
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'user_id');
     }
 }

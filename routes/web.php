@@ -38,6 +38,18 @@ Route::get('/presensi/index', [PresensiController::class,
 Route::get('/presensi/create', [PresensiController::class, 
 'create'])->name('presensi.create');
 
+// Form Masuk (GET)
+Route::get('/presensi/masuk/form', [PresensiController::class, 'create'])->name('presensi.create'); 
+
+// Aksi Simpan Masuk (POST)
+Route::post('/presensi/masuk', [PresensiController::class, 'storeMasuk'])->name('presensi.storeMasuk');
+
+// Form Pulang (GET) - SOLUSI Method Not Allowed
+Route::get('/presensi/pulang/form', [PresensiController::class, 'formPulang'])->name('presensi.formPulang'); 
+
+// Aksi Simpan Pulang (POST)
+Route::post('/presensi/pulang', [PresensiController::class, 'storePulang'])->name('presensi.storePulang');
+
 Route::post('presensi', [PresensiController::class, 
 'store'])->name('presensi.store');
 

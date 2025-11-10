@@ -33,17 +33,15 @@
             </thead>
     </div>
     <tbody>
-    @forelse($siswa as $index => $k)
+    @forelse($siswas as $index => $k)
         <tr class="border-b-2 border-gray-400 hover:bg-gray-50">
-            <td>{{ $loop->iteration + ($siswa->currentPage() - 1) * $siswa->perPage() }}</td>
+            <td>{{ $loop->iteration + ($siswas->currentPage() - 1) * $siswas->perPage() }}</td>
             <td class="py-3 px-4">{{ $k->nis }}</td>
             <td class="py-3 px-4">{{ $k->name }}</td>
             <td class="py-3 px-4">{{ $k->asal_sekolah ?? '-' }}</td>
             <td class="py-3 px-4">{{ $k->jurusan }}</td>
             <td class="py-3 px-4">
-            <a href="{{ route('presensi.create', ['siswa_id' => $k->id]) }}" class="btn btn-primary">
-                <i class="bi bi-plus-circle"></i>Presensi
-            </a>
+            
 
             <a href="{{ route('siswa.show', $k->id) }}" class="btn btn-sm btn-info" title="Lihat Detail">
                 <i class="fas fa-eye">Lihat Details</i>
@@ -78,7 +76,7 @@
     </tbody>
 
         </table>
-        {{ $siswa->links() }}
+        {{ $siswas->links() }}
 
         <!-- ini buat notif data yang berhasil di input -->
         @if(session('success'))
