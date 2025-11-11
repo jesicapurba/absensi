@@ -68,7 +68,7 @@ class PresensiController extends Controller
                              ->with('success', 'Absensi ' . $namaSiswa . ' berhasil dicatat sebagai ' . $validated['keterangan'] . '!');
 
         } catch (\Exception $e) {
-            \Log::error('Presensi Store Error: ' . $e->getMessage());
+            ('Presensi Store Error: ' . $e->getMessage());
             return redirect()->back()
                              ->with('error', 'Gagal menyimpan data. Silakan coba lagi.')
                              ->withInput();

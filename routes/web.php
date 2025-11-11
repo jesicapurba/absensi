@@ -16,7 +16,7 @@ Route::get('/siswa',[SiswaController::class,
 Route::get('/siswa/create',[SiswaController::class, 
 'create'])->name('siswa.create');
 
-Route::post('/siswa',[SiswaController::class, 
+Route::post('siswa/siswaStore',[SiswaController::class, 
 'store'])->name('siswa.store');
 
 Route::get('/siswa/{siswa_id}', [SiswaController::class, 
@@ -58,7 +58,7 @@ Route::delete('presensi/{siswa_id}',[PresensiController::class,
 
 // ini bagian dari link/url tampilan register, login dan logout
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('auth/postRegister', [AuthController::class, 'register'])->name('postRegister');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);

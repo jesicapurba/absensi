@@ -20,18 +20,16 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|string|max:5',
+            
         
         ]);
 
-        $user = User::create([
+         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role'=>'user',
+            'password' => bcrypt($request->password),
+            
         ]);
-
-        Auth::login($user);
 
         return redirect()->route('login')->with('success', 'Registrasi berhasil! Selamat datang.');
     }
@@ -59,7 +57,7 @@ class AuthController extends Controller
         }
 
 // Arahkan User/Pegawai biasa ke home
-return redirect()->intended('/home');
+// return redirect()->intended('/home');
         }
 
         return back()->withErrors([

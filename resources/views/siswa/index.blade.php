@@ -29,6 +29,8 @@
                     <th class="py-3 px-4 text-left">Asal Sekolah</th>
                     <th class="py-3 px-4 text-left">Jurusan</th>
                     <th class="py-3 px-4 text-left">Actions</th>
+                    <th class="py-3 px-4 text-left">Edit</th>
+                    <th class="py-3 px-4 text-left">Hapus</th>
                 </tr>
             </thead>
     </div>
@@ -52,6 +54,8 @@
                     <a href="{{ route('siswa.edit', $k->id) }}" class="text-green-500 hover:text-green-700">
                         <i class="fas fa-edit">Edit</i>
                     </a>
+                </td>
+                <td>
                 <form action="{{ route('siswa.destroy', $k->id) }}" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
@@ -59,6 +63,7 @@
                         <i class="fas fa-trash">Hapus</i>
                     </button>
                 </form>
+            </td>
                 </div>
             </td>
         </tr>

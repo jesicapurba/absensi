@@ -5,7 +5,7 @@
     <h2 class="text-3xl font-bold mb-6">Rekap Absensi Siswa</h2>
     
 
-    @if (Auth::user()->role === 'user')
+    @if (auth()->user()->role == 'user')
     <div class="mb-4 space-x-2">
         <a href="{{ route('presensi.create') }}" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
             Absensi Masuk

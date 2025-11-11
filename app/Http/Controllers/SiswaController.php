@@ -50,15 +50,17 @@ class SiswaController extends Controller
             'jurusan' =>'required|string|in:TKJ,RPL,DKV,ANIMASI',
         ]);
 
-        $user = User::create([
+        $user = Siswa::create([
+            'user_id' => Auth::id(),
             'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'nis' => $request->nis,
+            'asal_sekolah'=> $request->asal_sekolah,
+            'jurusan' => $request->jurusan,
         ]);
 
         try {
             // Tambahkan user_id sebelum menyimpan
-            $validatedData['user_id'] = Auth::id(); 
+            // $validatedData['user_id'] = Auth::id(); 
             
             // Simpan data
             Siswa::create($validatedData);
@@ -67,7 +69,7 @@ class SiswaController extends Controller
                 ->with('success', 'Data siswa berhasil ditambahkan.');
                 
         } catch (\Exception $e) {
-            \Log::error('Siswa Store Error: ' . $e->getMessage()); 
+            ('Siswa Store Error: ' . $e->getMessage()); 
             return redirect()->back()
                 ->with('error', 'Gagal menyimpan data. Silakan coba lagi.')
                 ->withInput();
@@ -76,7 +78,7 @@ class SiswaController extends Controller
 
     public function show($id)
     {
-        $siswa = \App\Models\Siswa::with('presensi')->findOrFail($id);
+        $siswa = Siswa::with('presensi')->findOrFail($id);
         return view('siswa.show', compact('siswa'));
     }
 
