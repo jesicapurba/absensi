@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($siswa->presensi as $presensi)
+                        @foreach($siswa as $presensis => $presensi)
                         <tr>
                             <td>{{ $presensi->nama }}</td>
                             <td>{{ $presensi->keterangan }}</td>

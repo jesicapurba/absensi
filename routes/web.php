@@ -19,7 +19,7 @@ Route::get('/siswa/create',[SiswaController::class,
 Route::post('siswa/siswaStore',[SiswaController::class, 
 'store'])->name('siswa.store');
 
-Route::get('/siswa/{siswa_id}', [SiswaController::class, 
+Route::get('/siswa/{id}', [SiswaController::class, 
 'show'])->name('presensi.show');
 
 Route::get('/siswa/{siswa}/edit',[SiswaController::class, 

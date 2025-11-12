@@ -24,14 +24,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($siswa->presensi as $presensi)
-                        <tr>
-                            <td>{{ $presensi->nama }}</td>
-                            <td>{{ $presensi->keterangan }}</td>
-                            <td>{{ $presensi->datang }}</td>
-                            <td>{{ $presensi->pulang }}</td>
-                        </tr>
-                        @endforeach
+                      <tr>
+                        <td>{{ $siswa->name }}</td>
+                        <td>{{$siswa->keterangan }}</td>
+                        <td>{{$siswa->jam_masuk }}</td>
+                        <td>{{$siswa->jam_pulang }}</td>
+                      </tr>
+                       
                     </tbody>
                 </table>
                 <p>Belum ada presensi hari ini.</p>

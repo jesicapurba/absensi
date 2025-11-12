@@ -78,8 +78,8 @@ class SiswaController extends Controller
 
     public function show($id)
     {
-        $siswa = Siswa::with('presensi')->findOrFail($id);
-        return view('siswa.show', compact('siswa'));
+       $siswa = Siswa::findOrFail($id);
+       return view('siswa.show', compact('siswa'));
     }
 
     public function update(Request $request, Siswa $siswa)
