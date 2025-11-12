@@ -56,7 +56,7 @@
                     </a>
                 </td>
                 <td>
-                <form action="{{ route('siswa.destroy', $k->) }}" method="POST" class="inline">
+                <form action="{{ route('siswa.destroy', $k->id) }}" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
                     <button type="submit" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')" class="text-red-500 hover:text-red-700">
